@@ -3,6 +3,7 @@ VERSION 1.3:
   Lucas van Staden (lvs) and Alan W. Richter (awr)
 - (lvs) Added control.c and control.h for camera motion control (view control.c
   for instructions)
+  used "http://127.0.0.1:8081/?control" to control it.
 - (lvs) Moved some variables used in uvc_stream.c to a struct to allow sharing
   between threads
 - (awr) cleaning up the opened socket on shutdown, added high resolution

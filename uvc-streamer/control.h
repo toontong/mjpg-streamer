@@ -21,13 +21,13 @@
 
 #define INCPANTILT 64 
 
-  struct control_data {
-    int control_port, stream_port;
-    struct vdIn *videoIn;
-    int width, height;
-    int minmaxfound, panmin, tiltmin, panmax, tiltmax, pan_angle, tilt_angle;
-    int moved, video_dev, snapshot;
-  };
+struct control_data {
+	int control_port, stream_port;
+	struct vdIn *videoIn;
+	int width, height;
+	int minmaxfound, panmin, tiltmin, panmax, tiltmax, pan_angle, tilt_angle;
+	int moved, video_dev, snapshot;
+};
 
 struct coord {
 	int x;

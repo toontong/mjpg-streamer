@@ -19,7 +19,7 @@ How to build
 源码理解
 ---
 
-###### 主源码在目录 ./mjpg-streamer, 主要结构如下：
+###### mjpg-streamer/ 主源码在目录：
 	mjpg_streamer.c: main程序入口，并负债加载 N个 input/output 插件。
 		- 源码定义N为最大各10个插件。
 		- 插件编译为so文件，使用-i表示加载一个input插件，-o为output插件；
@@ -41,11 +41,22 @@ How to build
 		再个插件都能运行起来，但我也未成功看到图像，可能参数不对，也没见到例子，再研究。
 		并且，默认是不编译出来这两个插件的so文件的。
 
-###### mjpeg-client/ 目录：不懂，不知用什么语言写的，bin/里面有exe文件，能在windows下运行。
-###### mjpg-streamer-experimental/ 目录：顾名思义，就是实验性的功能开发代码，与主目录结构一致。
-###### uvc-streamer/ 目录：貌似不是同一个作者写的，完全是另一个webcam，看里面的README更详细。
-###### udp_client/ 目录：C++的QT写的一个udp界面客户端，还没搞懂用法。
+###### mjpeg-client/ 目录：
+	不懂，不知用什么语言写的，bin/里面有exe文件，能在windows下运行。
 
+###### mjpg-streamer-experimental/ 目录：
+	顾名思义，就是实验性的功能开发代码，与主目录结构一致。
+
+###### uvc-streamer/ 目录：
+	貌似不是同一个作者写的，完全是另一个webcam，看里面的README更详细。
+	CHANGELOG中提到了3个开发者参与过代码贡献。
+	进入此目录，直接执行make即可编译出./uvc_stremer
+	默认视频输出URL是：http://127.0.0.1:8080/, /snapshot 可以获得单帧图片。
+	还有一个控制URL是：http://127.0.0.1:8081/?control --- PS测试中没能成功控制video
+	uvc_stremer可以认为是mjpg-streamer的精简版，重点在节省CPU。作者希望其与motion结合使用。
+
+###### udp_client/ 目录：
+	C++的QT写的一个udp界面客户端，还没搞懂用法。
 
 ### mjpg_streamer.c 中的加载插件过程：
 - 首先所有插件必需统一定义相同名称的4个函数，并编译为标准so文件。
@@ -58,3 +69,8 @@ How to build
 - 每个插件的run函数各自用了pthread_create修建新线程；通过判断globals.stop中止线程函数。
 - 插件的stop函数由main中注册的signal_handler调用，各自调用pthread_cancel释放资源。
 - signal_handler函数中，global.stop 置成 1，并调用[usleep](http://baike.baidu.com/view/2785782.htm)后再调用已加载插件的stop函数。
+
+### 视频流量问题：
+	使用./uvc_stream -r 320x240 -f 3; 320x240分辨率+每秒3帧，流量到60+KB/s,家用宽带能撑？
+	视频是没声音的，作为TODO项。
+	
